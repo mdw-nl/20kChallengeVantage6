@@ -1,0 +1,8 @@
+vantage6-client
+vantage6-tools
+vantage6-algorithm-tools
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib

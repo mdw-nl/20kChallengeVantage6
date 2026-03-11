@@ -1,0 +1,30 @@
+# DO NOT MODIFY THIS FILE MANUALLY.
+# This file contains the answers to the questions asked by the
+# v6-algorithm-template-creator (using the Copier package). The answers will
+# be updated if you re-run the template creator. Also, the answers in this file
+# may be used to submit your algorithm to a vantage6 algorithm store.
+_commit: 4.3.4
+_src_path: gh:vantage6/v6-algorithm-template.git
+advanced: true
+algorithm_description: Boilerplate code example after creating algorithm
+algorithm_name: 20kLogRegChallenge
+author: J. Doe
+central_args:
+- column
+central_function_client: true
+central_function_data: false
+central_function_name: central_function
+copyright: IKNL, 2024
+has_central_function: true
+has_docs: true
+has_gh_pipeline: false
+has_partial_function: true
+open_source_license: mit
+partial_args:
+- column
+partial_function_client: false
+partial_function_data: true
+partial_function_name: partial_function
+partial_function_number_databases: 1
+project_name: 20kLogRegChallenge
+use_vpn: false

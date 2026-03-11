@@ -1,0 +1,128 @@
+{
+  "name": "20kLogRegChallenge",
+  "image": "20kLogRegChallenge",
+  "vantage6_version": "4.3",
+  "partitioning": "horizontal",
+  "functions": [
+    {
+      "name": "central_function",
+      "description": "Central ADMM logistic regression orchestrator",
+      "type": "central",
+      "databases": [],
+      "arguments": [
+        {
+          "name": "num_rounds",
+          "type": "integer",
+          "description": "Maximum number of ADMM rounds"
+        },
+        {
+          "name": "rho",
+          "type": "float",
+          "description": "ADMM penalty parameter"
+        },
+        {
+          "name": "alpha",
+          "type": "float",
+          "description": "Over-relaxation parameter"
+        },
+        {
+          "name": "lambda_",
+          "type": "float",
+          "description": "L1 regularization weight"
+        },
+        {
+          "name": "abs_tol",
+          "type": "float",
+          "description": "Absolute convergence tolerance"
+        },
+        {
+          "name": "rel_tol",
+          "type": "float",
+          "description": "Relative convergence tolerance"
+        }
+      ]
+    },
+    {
+      "name": "init_node",
+      "description": "Initialize node: determine feature dimensions and patient counts",
+      "type": "federated",
+      "databases": [
+        {
+          "name": "Database 1"
+        }
+      ],
+      "arguments": []
+    },
+    {
+      "name": "admm_x_update_partial",
+      "description": "Local X-update for one ADMM round",
+      "type": "federated",
+      "databases": [
+        {
+          "name": "Database 1"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "z",
+          "type": "list",
+          "description": "Current global consensus parameter vector"
+        },
+        {
+          "name": "u",
+          "type": "list",
+          "description": "Current local dual variable"
+        },
+        {
+          "name": "rho",
+          "type": "float",
+          "description": "ADMM penalty parameter"
+        },
+        {
+          "name": "total_patients",
+          "type": "integer",
+          "description": "Global number of patients across all nodes"
+        },
+        {
+          "name": "x_prev",
+          "type": "list",
+          "description": "Previous local parameter vector (warm start)"
+        }
+      ]
+    },
+    {
+      "name": "evaluate_global_model",
+      "description": "Evaluate global model on local validation data",
+      "type": "federated",
+      "databases": [
+        {
+          "name": "Database 1"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "z",
+          "type": "list",
+          "description": "Global consensus parameter vector to evaluate"
+        }
+      ]
+    },
+    {
+      "name": "collect_predictions",
+      "description": "Collect predictions and outcomes for ROC/calibration",
+      "type": "federated",
+      "databases": [
+        {
+          "name": "Database 1"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "z",
+          "type": "list",
+          "description": "Final global consensus parameter vector"
+        }
+      ]
+    }
+  ]
+}
