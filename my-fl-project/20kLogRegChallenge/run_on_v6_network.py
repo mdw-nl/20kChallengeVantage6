@@ -3,17 +3,12 @@ from typing import Dict, List, Tuple
 from vantage6.client import Client
 
 ## Demo network stuff
-# SERVER_URL = "http://localhost"
-# SERVER_PORT = 7601
-# SERVER_API = "/api"
-# USERNAME = "dev_admin"
-# PASSWORD = "password"
-#
-SERVER_URL = "https://vantage6server.src-hizirwansal.src.surf-hosted.nl"
-SERVER_PORT = 443
-SERVER_API = "/serverapi"
-USERNAME = "root"
-PASSWORD = "root123"
+SERVER_URL = "http://localhost"
+SERVER_PORT = 7601
+SERVER_API = "/api"
+USERNAME = "dev_admin"
+PASSWORD = "password"
+
 
 IMAGE = "surfzare/20klogregchallenge"
 
