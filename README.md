@@ -69,7 +69,7 @@ pip install vantage6-client vantage6-algorithm-tools
 
 - vantage6 server running and reachable
 - Nodes running and connected (see `NODE1_SETUP.md`)
-- Algorithm image pushed to Docker Hub: `surfzare/20kLogRegChallenge`
+- Algorithm image pushed 
 - `vantage6-client` installed
 
 **How to run:**
