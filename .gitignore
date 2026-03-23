@@ -49,3 +49,7 @@ htmlcov/
 # Flower / FL runtime artifacts (if created later)
 workspace/
 *.tar.gz
+
+
+# data
+generated_data/
