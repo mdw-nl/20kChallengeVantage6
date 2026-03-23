@@ -45,6 +45,25 @@ Notes:
 - The script prunes Docker cache and unused images/containers after each run by default.
 - Federated task submission defaults to `gamma-user/gamma-password` in this setup.
 - Python auto-detection checks `python3.13`, then common `pyenv` 3.13 paths.
+- UI is disabled by default (headless mode).
+
+## UI Access (optional)
+
+Enable UI explicitly:
+
+```bash
+./scripts/run_20k_v6_infra_cycle.sh --enable-ui --ui-port 80
+```
+
+Valid users are organization users imported from generated entities:
+
+- `alpha-user / alpha-password`
+- `beta-user / beta-password`
+- `gamma-user / gamma-password`
+
+`root/root` is not created by this harness.
+
+Linux note: if your browser cannot resolve `host.docker.internal`, UI login may fail even with correct credentials. Add a host alias (for example `127.0.0.1 host.docker.internal`) or run in headless mode.
 
 ## Run with Different Node Counts
 

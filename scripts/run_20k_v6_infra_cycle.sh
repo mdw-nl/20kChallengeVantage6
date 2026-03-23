@@ -15,6 +15,8 @@ Options:
   --num-subjects <int>    Synthetic cohort size (>=500, default: 2000)
   --num-rounds <int>      ADMM rounds for federated run (default: 25)
   --registry-port <int>   Local Docker registry port (default: 5001)
+  --enable-ui             Start the v6 UI container (default: disabled)
+  --ui-port <int>         UI port when enabled (default: 80)
   --keep-registry         Keep local registry container after script exits
   --no-prune-docker       Skip Docker cleanup (cache/images/containers) at end
   -h, --help              Show this help
@@ -39,6 +41,8 @@ NUM_SUBJECTS="${NUM_SUBJECTS:-2000}"
 NUM_ROUNDS="${NUM_ROUNDS:-25}"
 REGISTRY_PORT="${REGISTRY_PORT:-5001}"
 KEEP_REGISTRY="false"
+UI_ENABLED="${UI_ENABLED:-false}"
+UI_PORT="${UI_PORT:-80}"
 PRUNE_DOCKER="true"
 DOCKER_REGISTRY="${DOCKER_REGISTRY:-harbor2.vantage6.ai/infrastructure}"
 TASK_TIMEOUT_S="${TASK_TIMEOUT_S:-1800}"
@@ -63,6 +67,10 @@ while [[ "$#" -gt 0 ]]; do
       NUM_ROUNDS="$2"; shift 2 ;;
     --registry-port)
       REGISTRY_PORT="$2"; shift 2 ;;
+    --enable-ui)
+      UI_ENABLED="true"; shift 1 ;;
+    --ui-port)
+      UI_PORT="$2"; shift 2 ;;
     --keep-registry)
       KEEP_REGISTRY="true"; shift 1 ;;
     --no-prune-docker)
@@ -88,6 +96,11 @@ fi
 
 if ! [[ "$NUM_ROUNDS" =~ ^[0-9]+$ ]] || (( NUM_ROUNDS < 1 )); then
   echo "[error] --num-rounds must be a positive integer" >&2
+  exit 1
+fi
+
+if ! [[ "$UI_PORT" =~ ^[0-9]+$ ]] || (( UI_PORT < 1 || UI_PORT > 65535 )); then
+  echo "[error] --ui-port must be an integer between 1 and 65535" >&2
   exit 1
 fi
 
@@ -147,7 +160,9 @@ run_infra() {
   (
     cd "$INFRA_DIR"
     ENVIRONMENT=CI \
-    UI_ENABLED=true \
+    UI_ENABLED="$UI_ENABLED" \
+    UI_PORT="$UI_PORT" \
+    UI_URL="http://localhost:${UI_PORT}" \
     NODES_CONFIG="$NODES_ENV" \
     COLLABORATION_NAME="$COLLAB_NAME" \
     PYTHON_INTERPRETER="$VENV_DIR/bin/python" \
@@ -299,6 +314,22 @@ run_infra down >/dev/null 2>&1 || true
 run_infra preflight
 run_infra up
 INFRA_STARTED="true"
+
+if [[ "$UI_ENABLED" == "true" ]]; then
+  echo "[info] UI enabled at http://localhost:${UI_PORT}"
+  echo "[info] Valid users are organization users from entities import:"
+  echo "       alpha-user / alpha-password"
+  echo "       beta-user  / beta-password"
+  echo "       gamma-user / gamma-password"
+  echo "[info] root/root is not created by this harness."
+  if [[ "$(uname -s)" == "Linux" ]]; then
+    if ! getent hosts host.docker.internal >/dev/null 2>&1; then
+      echo "[warn] host.docker.internal is not resolvable on this host."
+      echo "[warn] UI may fail to login from browser despite valid credentials."
+      echo "[warn] Add host alias (e.g. in /etc/hosts: 127.0.0.1 host.docker.internal) or run headless."
+    fi
+  fi
+fi
 
 # small settle period for node startup and registration
 echo "[step] waiting briefly for infra to settle"
