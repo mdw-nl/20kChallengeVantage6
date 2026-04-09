@@ -20,6 +20,7 @@ This guide reproduces the full cycle requested by the consortium:
 - Open ports:
   - `5070` (v6 server API)
   - `5001` (default local Docker registry; configurable)
+  - `80` (v6 UI when `--enable-ui` is used; configurable via `--ui-port`)
 
 ## One-command Run (recommended)
 
