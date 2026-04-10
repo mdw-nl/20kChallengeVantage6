@@ -241,7 +241,7 @@ if [[ ! -f "$REPORT_JSON" ]]; then
   exit 1
 fi
 
-FULL_DATA="$($VENV_DIR/bin/python - <<PY
+FULL_DATA="$("$VENV_DIR/bin/python" - <<PY
 import json
 from pathlib import Path
 p=Path('$REPORT_JSON')
@@ -250,7 +250,7 @@ print(report['full_dataset_csv'])
 PY
 )"
 
-SPLIT_DIR="$($VENV_DIR/bin/python - <<PY
+SPLIT_DIR="$("$VENV_DIR/bin/python" - <<PY
 import json
 from pathlib import Path
 p=Path('$REPORT_JSON')
